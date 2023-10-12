@@ -1,0 +1,13 @@
+*.csv
+*.code-workspace
+tst/
+S/
+Nₑ/
+ℓκ/
+κ/
+*.html
+*.pdf
+*.lintr
+*.lua
+*.svg
+*.png
