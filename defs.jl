@@ -155,14 +155,6 @@ function σ²(S,Jₑ,L)
 	return S/(Jₑ^2*(S-1)*((1-(1-1/Jₑ)^L)))
 end
 
-@with_kw mutable struct rnpars
-
-	ℓκ::Distribution = Dirichlet([1/2,1/2])
-
-
-end
-
-
 @with_kw mutable struct parameters
 
 	# system parameters
@@ -385,7 +377,7 @@ function ind_df(sys::system,π::parameters)
 	gs    = Vector{Float64}()
 	ms    = Vector{Float64}()
 	zs    = Vector{Float64}()
-	ws	  = Vector{Float64}()
+	Ws	  = Vector{Float64}()
 	αs	  = Array{Float64}(undef,0,S)
 	fs	  = Array{Float64}(undef,0,S)
 	types = Vector{String}()
@@ -396,7 +388,7 @@ function ind_df(sys::system,π::parameters)
 	push!(gs,0)
 	push!(ms,Jₑᴱ*dot(fᴱ,H[1].α)-c)
 	push!(zs,0)
-	push!(ws,0)
+	push!(Ws,0)
 	αs = [αs;H[1].α']
 	fs = [fs;fᴱ']	
 	push!(types,"env")
@@ -408,7 +400,7 @@ function ind_df(sys::system,π::parameters)
 		push!(gs,h.g)
 		push!(ms,h.m)
 		push!(zs,h.z)
-		push!(ws,h.w)
+		push!(Ws,h.W)
 		αs = [αs;h.α']
 		fs = [fs;h.f']
 		push!(types,"hst")
@@ -420,7 +412,7 @@ function ind_df(sys::system,π::parameters)
 		g=gs,
 		m=ms,
 		z=zs,
-		w=ws,
+		W=Ws,
 		t=fill(t,Nₑ+1),
 		k=fill(k,Nₑ+1),
 		type=types
@@ -460,7 +452,7 @@ function pop_df(sys::system,π::parameters)
 		G = G,
 		M = M,
 		corr = cov(hstdat.g,hstdat.m)/sqrt(G*M),
-		β = cov(hstdat.w,hstdat.z)/P,
+		β = cov(hstdat.W,hstdat.z)/P,
 		t = hstdat.t[1],
 		k = hstdat.k[1]
 	)
@@ -615,11 +607,6 @@ end
 
 function cohen(pdat::DataFrame,par::DataFrame,t::Int64,k::Int64)
 
-	# thought:
-	# 			use unsigned cohen's d to measure goodness of fit
-	#				summarize goodness of fit across time points by averaging across time
-	#			use signed cohen's d to measure bias
-
 	subdat = pdat[pdat.k .== k, :]
 
 	# current
@@ -642,14 +629,14 @@ function cohen(pdat::DataFrame,par::DataFrame,t::Int64,k::Int64)
 	cs = asystem(
 
 		# model parameters
-		ℓ = par.ell[1],		# lineal inheritance
-		κ = par.kap[1],		# collective inheritance
-		ε = par.eps[1],		# prb of env ancestry
+		ℓ = par.ell[k],		# lineal inheritance
+		κ = par.kap[k],		# collective inheritance
+		ε = par.eps[k],		# prb of env ancestry
 		E = 0.0,			# variance of noise
 		G = crtdat.G[1],	# additive genetic variance
 		M = crtdat.M[1],	# additive microbial variance
 		P = crtdat.P[1],	# phenotypic variance
-		β = crtdat.β[1],		# selection gradient (= s under model assumptions in main text)
+		β = crtdat.β[1],	# selection gradient (= s under model assumptions in main text)
 
 		# state variables
 		ḡ = crtdat.g[1],	 # mean additive genetic value
@@ -667,15 +654,29 @@ function cohen(pdat::DataFrame,par::DataFrame,t::Int64,k::Int64)
 		ξ = nxtdat.ξ[1]		# env additive microbial value
 	)
 
-	ps = Δ(cs)
+	as  = Δ(cs)
 	
-	z̄ᵈ = (ps.z̄ - ss.z̄) / sqrt(cs.P)
+	ρ = DataFrame(
+		κ  = cs.κ,
+		κℓ = cs.κ + cs.ℓ,
+		k  = k,
+		β = cs.β,
+		P = cs.P,
+		G = cs.G,
+		M = cs.M,
+		Dza = as.z̄ - cs.z̄,
+		Dzs = ss.z̄ - cs.z̄,
+		Dga = as.ḡ - cs.ḡ,
+		Dgs = ss.ḡ - cs.ḡ,
+		Dma = as.m̄ - cs.m̄,
+		Dms = ss.m̄ - cs.m̄,
+		dz = (as.z̄ - ss.z̄)/sqrt(cs.P),
+		dg = (as.ḡ - ss.ḡ)/sqrt(cs.G),
+		dm = (as.m̄ - ss.m̄)/sqrt(cs.M),
+		corr = crtdat.corr[1]
+	)
 
-	ḡᵈ = (ps.ḡ - ss.ḡ) / sqrt(cs.G)
-
- 	m̄ᵈ = (ps.m̄ - ss.m̄) / sqrt(cs.M)
-
-	return crtdat.corr[1], z̄ᵈ, ḡᵈ, m̄ᵈ
+	return ρ
 
 end
 
@@ -701,17 +702,8 @@ function convert(fldr::String,pcombs::UnitRange{Int64})
 
 		for t in 1:(par.T[1]-1)
 			for k in 1:par.K[1]
-				corr, z̄ᵈ, ḡᵈ, m̄ᵈ = cohen(pdat,par,t,k)
-				tmpdat = DataFrame(
-					S  = par.S[1],
-					Nₑ = par.Ne[1],
-					ℓ  = par.ell[1],
-					Corr = corr,
-					z̄ᵈ = z̄ᵈ,
-					ḡᵈ = ḡᵈ,
-					m̄ᵈ = m̄ᵈ,
-					k  = k
-				)
+				ρ = cohen(pdat,par,t,k)
+				tmpdat[k] = hcat(DataFrame(S=par.S[k],Ne=par.Ne[k]),ρ)
 				fnldat = vcat(fnldat,tmpdat)
 			end
 		end
@@ -730,18 +722,8 @@ function convert(fldr::String,n::Int64)
 	tmpdat = Vector{DataFrame}(undef, n)
 	for t in 1:(par.T[1]-1)
 		Threads.@threads for k in 1:n
-			corr, z̄ᵈ, ḡᵈ, m̄ᵈ = cohen(pdat,par,t,k)
-			tmpdat[k] = DataFrame(
-				S  = par.S[k],
-				Ne = par.Ne[k],
-				κ  = par.kap[k],
-				κℓ  = par.kap[k]+par.ell[k],
-				Corr = corr,
-				dz = z̄ᵈ,
-				dg = ḡᵈ,
-				dm = m̄ᵈ,
-				k  = k
-			)
+			ρ = cohen(pdat,par,t,k)
+			tmpdat[k] = hcat(DataFrame(S=par.S[k],Ne=par.Ne[k]),ρ)
 		end
 		for k in 1:n
 			fnldat = vcat(fnldat,tmpdat[k])
