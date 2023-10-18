@@ -45,7 +45,7 @@ end
 #region
 
 @with_kw mutable struct asystem
-	
+
 	# model parameters
 	ℓ::Float64	= (3-√5)/2	# lineal inheritance
 	κ::Float64	= (3-√5)/2	# collective inheritance
@@ -166,8 +166,8 @@ end
 	Nₑ::Int64	= 1000		# number of hosts
 	s::Float64	= 0.01		# host selection strength
 	μ::Float64	= 1.0		# variance of mutation
-	Jₑᴱ::Int64	= 1000*S	# number of microbes in environment
-	Jₑᴹ::Int64	= 1000*S	# number of microbes in a host
+	Jₑᴱ::Int64	= 10000		# number of microbes in environment
+	Jₑᴹ::Int64	= 10000		# number of microbes in a host
 	aqsz::Int64 = 100		# size of sample for acquired microbiomes
 	shsz::Int64 = 100		# size of sample for shedded microbiomes
 
@@ -703,7 +703,10 @@ function convert(fldr::String,pcombs::UnitRange{Int64})
 		for t in 1:(par.T[1]-1)
 			for k in 1:par.K[1]
 				ρ = cohen(pdat,par,t,k)
-				tmpdat[k] = hcat(DataFrame(S=par.S[k],Ne=par.Ne[k]),ρ)
+				tmpdat[k] = hcat(DataFrame(
+					S=par.S[k],
+					Ne=par.Ne[k],
+					Je=par.JeM[k]),ρ)
 				fnldat = vcat(fnldat,tmpdat)
 			end
 		end
@@ -723,7 +726,10 @@ function convert(fldr::String,n::Int64)
 	for t in 1:(par.T[1]-1)
 		Threads.@threads for k in 1:n
 			ρ = cohen(pdat,par,t,k)
-			tmpdat[k] = hcat(DataFrame(S=par.S[k],Ne=par.Ne[k]),ρ)
+			tmpdat[k] = hcat(DataFrame(
+				S=par.S[k],
+				Ne=par.Ne[k],
+				Je=par.JeM[k]),ρ)
 		end
 		for k in 1:n
 			fnldat = vcat(fnldat,tmpdat[k])

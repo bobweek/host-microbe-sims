@@ -53,7 +53,7 @@ Nepl = ggplot() +
     #     fullrange=TRUE,
     #     # formula = y ~ x + I(x^2),
     #     color=clrs[1]) +
-    coord_cartesian(ylim=c(-0.5,0.5)) +
+    coord_cartesian(ylim=c(-0.25,0.25)) +
     scale_x_continuous(trans='log10') +
     theme_fivethirtyeight() +
     xlab("Host Population Size, Nₑ") +
@@ -89,7 +89,7 @@ Spl = ggplot() +
     #     method=lm,
     #     # formula = y ~ x + I(x^2),
     #     color=clrs[1]) +
-    coord_cartesian(ylim=c(-0.5,0.5)) +
+    coord_cartesian(ylim=c(-0.25,0.25)) +
     scale_x_continuous(trans='log10') +
     theme_fivethirtyeight() +
     xlab("Microbiome Richness, S") +
@@ -124,7 +124,7 @@ subdf = fnl[sample(nrow(fnl), 10000),]
     #     fullrange=TRUE,
     #     # formula = y ~ x + I(x^2),
     #     color=clrs[1]) +
-    coord_cartesian(ylim=c(-0.5,0.5)) +
+    coord_cartesian(ylim=c(-0.25,0.25)) +
     theme_fivethirtyeight() +
     xlab("Collective Inheritance, κ") +
     ylab("Cohen's d") + 
@@ -157,7 +157,7 @@ subdf = fnl[sample(nrow(fnl), 10000),]
     #     fullrange=TRUE,
     #     # formula = y ~ x + I(x^2),
     #     color=clrs[1]) +
-    coord_cartesian(ylim=c(-0.5,0.5)) +
+    coord_cartesian(ylim=c(-0.25,0.25)) +
     theme_fivethirtyeight() +
     xlab("Microbial Inheritance, κ+ℓ") +
     ylab("") + 
@@ -199,7 +199,7 @@ ggplot() +
     #     color=clrs[1]) +
     # coord_cartesian(
     #     xlim=c(-0.0001,0.0001),
-    #     ylim=c(-0.5,0.5)) +
+    #     ylim=c(-0.25,0.25)) +
     theme_fivethirtyeight() +
     xlab("Selection Gradient, β") +
     ylab("") + 
@@ -219,7 +219,7 @@ ggplot() +
     #     color=clrs[1]) +
     # coord_cartesian(
     #     xlim=c(-0.0001,0.0001),
-    #     ylim=c(-0.5,0.5)) +
+    #     ylim=c(-0.25,0.25)) +
     theme_fivethirtyeight() +
     xlab("Selection Gradient, β") +
     ylab("") + 

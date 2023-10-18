@@ -1,4 +1,4 @@
-using Parameters, LinearAlgebra, Random, Distributions, DataFrames, CSV
+using LinearAlgebra, Distributions
 
 function realβ(s,n)
     z = rand(Normal(),n)
@@ -11,4 +11,4 @@ function realβ(s,n)
     return β, β̂
 end
 
-realβ(1,10000000)
+realβ(1,100)
