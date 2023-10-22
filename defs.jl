@@ -163,7 +163,7 @@ end
 	ε::Float64	= ε₀(ℓ,κ)	# prb of env ancestry
 	L::Int64	= 30		# microbiome dynamics per host generation
 	S::Int64	= 100		# number of microbe species
-	Nₑ::Int64	= 1000		# number of hosts
+	Nₑ::Int64	= 200		# number of hosts
 	s::Float64	= 0.01		# host selection strength
 	μ::Float64	= 1.0		# variance of mutation
 	Jₑᴱ::Int64	= 10000		# number of microbes in environment
@@ -462,26 +462,26 @@ function pop_df(sys::system,π::parameters)
 
 end
 
-function savepar(π::parameters)
-	@unpack_parameters π
-	par = DataFrame(
-		sig = σ,
-		ell = ℓ,
-		kap = κ,
-		eps = ε,
-		L   = L,
-		S   = S,
-		Ne  = Nₑ,
-		s   = s,
-		mu  = μ,
-		JeE = Jₑᴱ,
-		JeM = Jₑᴹ,
-		K   = K,
-		T   = T,
-		B   = B
-	)
-	CSV.write(fldr*"par_"*fname*".csv", par)
-end
+# function savepar(π::parameters)
+# 	@unpack_parameters π
+# 	par = DataFrame(
+# 		sig = σ,
+# 		ell = ℓ,
+# 		kap = κ,
+# 		eps = ε,
+# 		L   = L,
+# 		S   = S,
+# 		Ne  = Nₑ,
+# 		s   = s,
+# 		mu  = μ,
+# 		JeE = Jₑᴱ,
+# 		JeM = Jₑᴹ,
+# 		K   = K,
+# 		T   = T,
+# 		B   = B
+# 	)
+# 	CSV.write(fldr*"par_"*fname*".csv", par)
+# end
 
 function popcat(sys::system,π::parameters,popdf::DataFrame)
 	pdf = pop_df(sys,π)
@@ -505,27 +505,6 @@ function sim(π::parameters)
 	return popdf
 end
 
-# run ensemble
-function ens(π::parameters)
-
-	savepar(π)
-
-	repdfs = Vector{DataFrame}(undef, π.K)
-	Threads.@threads for k in 1:π.K
-		local πₚ = deepcopy(π)
-		πₚ.k = k
-		repdfs[k] = sim(πₚ)
-	end
-
-	pdat = repdfs[1]
-	for k in 2:π.K
-		pdat = vcat(pdat,repdfs[k])
-	end
-
-	CSV.write(π.fldr*"pop_dat_"*π.fname*".csv", pdat)
-
-end
-
 function π2df(π::parameters)
 	@unpack_parameters π
 	df = DataFrame(
@@ -546,6 +525,31 @@ function π2df(π::parameters)
 		k   = k
 	)
 	return df
+end
+
+# run ensemble
+function ens(π::parameters)
+
+	rps = DataFrame()
+	for k in 1:π.K
+		rps = vcat(rps,π2df(π))
+	end
+	CSV.write(π.fldr*"par_"*π.fname*".csv", rps)
+
+	repdfs = Vector{DataFrame}(undef, π.K)
+	Threads.@threads for k in 1:π.K
+		local πₚ = deepcopy(π)
+		πₚ.k = k
+		repdfs[k] = sim(πₚ)
+	end
+
+	pdat = repdfs[1]
+	for k in 2:π.K
+		pdat = vcat(pdat,repdfs[k])
+	end
+
+	CSV.write(π.fldr*"pop_dat_"*π.fname*".csv", pdat)
+
 end
 
 function rp(Π::Vector{parameters})
@@ -683,16 +687,7 @@ end
 # make csv with columns equal to S, Nₑ, ℓ, Corr(m,g), z̄ᵈ, ḡᵈ, m̄ᵈ, k
 function convert(fldr::String,pcombs::UnitRange{Int64})
 
-	fnldat = DataFrame(
-		S  = Int64[],
-		Nₑ = Int64[],
-		ℓ  = Float64[],
-		Corr = Float64[],
-		z̄ᵈ = Float64[],
-		ḡᵈ = Float64[],
-		m̄ᵈ = Float64[],
-		k  = Int64[]
-	)
+	fnldat = DataFrame()
 
 	for i in pcombs
 
@@ -703,7 +698,7 @@ function convert(fldr::String,pcombs::UnitRange{Int64})
 		for t in 1:(par.T[1]-1)
 			for k in 1:par.K[1]
 				ρ = cohen(pdat,par,t,k)
-				tmpdat[k] = hcat(DataFrame(
+				tmpdat = hcat(DataFrame(
 					S=par.S[k],
 					Ne=par.Ne[k],
 					Je=par.JeM[k]),ρ)
@@ -712,7 +707,7 @@ function convert(fldr::String,pcombs::UnitRange{Int64})
 		end
 	end
 
-	CSV.write(fldr*"fnl_dat.csv", fnldat)
+	CSV.write(fldr*"fnl_fxdpar_dat.csv", fnldat)
 
 end
 

@@ -26,8 +26,11 @@ print("\nPackages Loaded\n")
 function Nₑ(Nₑs)
 
     # if no dir make dir
-    if !isdir("Nₑ")
-        mkdir("Nₑ")
+    if !isdir("dat")
+        mkdir("dat")
+    end
+    if !isdir("dat/Nₑ")
+        mkdir("dat/Nₑ")
     end
 
     for Nₑ in Nₑs
@@ -39,7 +42,7 @@ function Nₑ(Nₑs)
             κ = 0,
             Nₑ = Nₑ,
             fname = lpad(fn,3,"0"),
-            fldr = "Nₑ/",
+            fldr = "dat/Nₑ/",
             T = 200
             )
         
@@ -52,9 +55,12 @@ end
 function S(Ss)
 
     # if no dir make dir
-    if !isdir("S")
-        mkdir("S")
+    if !isdir("dat")
+        mkdir("dat")
     end
+    if !isdir("dat/S")
+        mkdir("dat/S")
+    end    
 
     for S in Ss
 
@@ -65,7 +71,7 @@ function S(Ss)
             κ = 0,
             S = S,
             fname = lpad(fn,3,"0"),
-            fldr = "S/",
+            fldr = "dat/S/",
             T = 200
             )
         
@@ -78,9 +84,12 @@ end
 function κ(κs)
 
     # if no dir make dir
-    if !isdir("κ")
-        mkdir("κ")
+    if !isdir("dat")
+        mkdir("dat")
     end
+    if !isdir("dat/κ")
+        mkdir("dat/κ")
+    end    
 
     for κ in κs
 
@@ -90,7 +99,7 @@ function κ(κs)
             ℓ = 1-κ,
             κ = κ,
             fname = lpad(fn,3,"0"),
-            fldr = "κ/",
+            fldr = "dat/κ/",
             T = 200
             )
         
@@ -100,14 +109,53 @@ function κ(κs)
 
 end
 
-Nₑs = trunc.(Int64,10 .^ (1.0:0.25:3.0))
-Ss  = trunc.(Int64,10 .^ (1.0:0.25:3.0))
-κs  = 0:0.125:1
+function Jₑ(Jₑs)
 
-Nₑ(Nₑs)
-S(Ss)
-κ(κs)
+    # if no dir make dir
+    if !isdir("dat")
+        mkdir("dat")
+    end
+    if !isdir("dat/Jₑ")
+        mkdir("dat/Jₑ")
+    end
 
-convert("Nₑ/",1:length(Nₑs))
-convert("S/",1:length(Ss))
-convert("κ/",1:length(κs))
+    for Jₑ in Jₑs
+
+        fn = findall(x->x==Jₑ,Jₑs)[1]
+
+        p = parameters(
+            ℓ = 1,
+            κ = 0,
+            Jₑᴹ = Jₑ,
+            Jₑᴱ = Jₑ,
+            fname = lpad(fn,3,"0"),
+            fldr = "dat/Jₑ/",
+            T = 200
+            )
+        
+        ens(p)
+
+    end
+
+    cmmd1 = `echo "Has finished simulating across Jₑ"`
+    cmmd2 = `mail -s "Cresko Cluster" bweek@uoregon.edu`
+    run(pipeline(cmmd1,cmmd2))
+
+    convert("dat/Jₑ/",1:length(Jₑs))
+
+end
+
+# Nₑs = trunc.(Int64,10 .^ (1.0:0.25:3.0))
+# Ss  = trunc.(Int64,10 .^ (1.0:0.25:3.0))
+# κs  = 0:0.125:1
+
+# Nₑ(Nₑs)
+# S(Ss)
+# κ(κs)
+
+# convert("dat/Nₑ/",1:length(Nₑs))
+# convert("dat/S/",1:length(Ss))
+# convert("dat/κ/",1:length(κs))
+
+Jₑs = trunc.(Int64,10 .^ (2.0:1.0:4.0))
+Jₑ(Jₑs)
