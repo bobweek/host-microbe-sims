@@ -119,9 +119,9 @@ function asave(as::asystem)
 	)
 
 	if (k == 0) & (t == 0)
-		CSV.write("a_dat.csv", dat)
+		CSV.write("dat/a_dat.csv", dat)
 	else
-		CSV.write("a_dat.csv", dat, append=true)
+		CSV.write("dat/a_dat.csv", dat, append=true)
 	end
 
 	return

@@ -35,10 +35,10 @@ for ℓ in ℓs
 
 		as = asystem(ℓ = ℓ, κ = κ, G = 0, T = 5, k = i)
 		arun(as)
-		i += 1
+		global i += 1
 
 	end
 
 end
 
-R"source('analytical-trans-mode-figure.r')"
+R"source('plotting_scripts/analytical-trans-mode-figure.r')"

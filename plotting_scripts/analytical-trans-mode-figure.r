@@ -5,7 +5,7 @@ require("gridExtra")
 require("reshape")
 
 # read in data from analytical model
-adat <- read.csv("a_dat.csv")
+adat <- read.csv("dat/a_dat.csv")
 
 # melt z and xi columns
 no_melty = colnames(adat)[c(2:3,5:14)]
@@ -47,5 +47,4 @@ ap <- ggplot(meltadat) +
         strip.text.y.right = element_text(angle = 0, size=16),
         strip.text.x.top = element_text(size=16))
 
-ggsave("transmission-modes.svg", ap, width = 9, height = 5, bg='transparent')
-
+ggsave("transmission-modes.png", ap, width = 9, height = 5, bg='transparent')
