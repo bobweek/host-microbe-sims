@@ -55,7 +55,7 @@ Nepl = ggplot() +
     #     color=clrs[1]) +
     coord_cartesian(ylim=c(-0.25,0.25)) +
     scale_x_continuous(trans='log10') +
-    theme_fivethirtyeight() +
+    dark_mode(theme_fivethirtyeight()) +
     xlab("Host Population Size, Nₑ") +
     ylab("Cohen's d") + 
     cmnthm_slides
@@ -91,7 +91,7 @@ Spl = ggplot() +
     #     color=clrs[1]) +
     coord_cartesian(ylim=c(-0.25,0.25)) +
     scale_x_continuous(trans='log10') +
-    theme_fivethirtyeight() +
+    dark_mode(theme_fivethirtyeight()) +
     xlab("Microbiome Richness, S") +
     ylab("") + 
     cmnthm_slides
@@ -125,8 +125,8 @@ subdf = fnl[sample(nrow(fnl), 10000),]
     #     # formula = y ~ x + I(x^2),
     #     color=clrs[1]) +
     coord_cartesian(ylim=c(-0.25,0.25)) +
-    theme_fivethirtyeight() +
-    xlab("Collective Inheritance, κ") +
+    dark_mode(theme_fivethirtyeight()) +
+    xlab("Collective Inheritance, κ\nℓ=1-κ") +
     ylab("Cohen's d") + 
     cmnthm_slides
     # cmnthm_ms
@@ -158,16 +158,16 @@ subdf = fnl[sample(nrow(fnl), 10000),]
     #     # formula = y ~ x + I(x^2),
     #     color=clrs[1]) +
     coord_cartesian(ylim=c(-0.25,0.25)) +
-    theme_fivethirtyeight() +
-    xlab("Microbial Inheritance, κ+ℓ") +
+    dark_mode(theme_fivethirtyeight()) +
+    xlab("Microbial Inheritance, κ+ℓ\n") +
     ylab("") + 
     cmnthm_slides
     # cmnthm_ms
 
 dpl = grid.arrange(Nepl,Spl,κpl,κℓpl,nrow=2);
 
-ggsave("d.svg",dpl,width=12,height=12,bg='transparent')
-ggsave("d.png",dpl,width=8,height=8)
+ggsave("d_dm.svg",dpl,width=12,height=6,bg='transparent')
+ggsave("d_dm.png",dpl,width=8,height=8)
 
 #
 # β
@@ -220,10 +220,8 @@ ggplot() +
     # coord_cartesian(
     #     xlim=c(-0.0001,0.0001),
     #     ylim=c(-0.25,0.25)) +
-    theme_fivethirtyeight() +
+    dark_mode(theme_fivethirtyeight()) +
     xlab("Selection Gradient, β") +
     ylab("") + 
     cmnthm_slides
 # cmnthm_ms
-
-# WHERE DID THE BIAS GO? TURN ON HOST GENETICS, AND THEN YOU MAY KNOW...

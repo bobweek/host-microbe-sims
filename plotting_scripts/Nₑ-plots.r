@@ -16,13 +16,13 @@ clrs = gg_color_hue(5)
 # 2 ~ Nₑ = 100
 # 3 ~ Nₑ = 1000
 
-par1 <- read.csv("Nₑ/par_001.csv")
-par2 <- read.csv("Nₑ/par_005.csv")
-par3 <- read.csv("Nₑ/par_009.csv")
+par1 <- read.csv("dat/Nₑ/par_001.csv")
+par2 <- read.csv("dat/Nₑ/par_005.csv")
+par3 <- read.csv("dat/Nₑ/par_009.csv")
 
-pop1 <- read.csv("Nₑ/pop_dat_001.csv")
-pop2 <- read.csv("Nₑ/pop_dat_005.csv")
-pop3 <- read.csv("Nₑ/pop_dat_009.csv")
+pop1 <- read.csv("dat/Nₑ/pop_dat_001.csv")
+pop2 <- read.csv("dat/Nₑ/pop_dat_005.csv")
+pop3 <- read.csv("dat/Nₑ/pop_dat_009.csv")
 
 minmin = min(pop1$m,pop2$m,pop3$m,
                 pop1$g,pop2$g,pop3$g)

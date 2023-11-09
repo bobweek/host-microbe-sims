@@ -166,8 +166,8 @@ end
 	Nₑ::Int64	= 200		# number of hosts
 	s::Float64	= 0.01		# host selection strength
 	μ::Float64	= 1.0		# variance of mutation
-	Jₑᴱ::Int64	= 10000		# number of microbes in environment
-	Jₑᴹ::Int64	= 10000		# number of microbes in a host
+	Jₑᴱ::Int64	= 10^6		# number of microbes in environment
+	Jₑᴹ::Int64	= 10^6		# number of microbes in a host
 	aqsz::Int64 = 100		# size of sample for acquired microbiomes
 	shsz::Int64 = 100		# size of sample for shedded microbiomes
 

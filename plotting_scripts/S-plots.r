@@ -16,7 +16,7 @@ clrs = gg_color_hue(5)
 # 2 ~ S = 50
 # 3 ~ S = 100
 
-par1 <- read.csv("S/par_001.csv")
+par1 <- read.csv("dat/S/par_001.csv")
 par2 <- read.csv("S/par_003.csv")
 par3 <- read.csv("S/par_005.csv")
 

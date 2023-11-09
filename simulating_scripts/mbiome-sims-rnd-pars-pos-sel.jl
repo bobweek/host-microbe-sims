@@ -22,7 +22,6 @@ function Nₑ(n)
             Nₑ=Nₑs[r],
             K=1,
             k=r,
-            μ=0,
             fldr="dat/posNₑ/"
             )
         push!(Π,π)
@@ -60,7 +59,6 @@ function S(n)
             S=Ss[r],
             K=1,
             k=r,
-            μ=0,
             fldr="dat/posS/"
             )
         push!(Π,π)
@@ -97,7 +95,6 @@ function κ(n)
             κ=κ[r],
             K=1,
             k=r,
-            μ=0,
             fldr="dat/posκ/")
         push!(Π,π)
     end
@@ -133,7 +130,6 @@ function κℓ(n)
             κ=κℓ[1,r]*(1-κℓ[2,r]),
             K=1,
             k=r,
-            μ=0,
             fldr="dat/posκℓ/")
         push!(Π,π)
     end

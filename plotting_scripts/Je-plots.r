@@ -12,10 +12,6 @@ gg_color_hue <- function(n) {
 
 clrs = gg_color_hue(5)
 
-# 1 ~ S = 10
-# 2 ~ S = 1000
-# 3 ~ S = 10000
-
 par1 <- read.csv("dat/Jₑ/par_001.csv")
 par2 <- read.csv("dat/Jₑ/par_002.csv")
 par3 <- read.csv("dat/Jₑ/par_003.csv")
@@ -134,7 +130,7 @@ zp = grid.arrange(
     mp1,mp2,mp3,    
     ncol=3)
 
-ggsave("zp-S.svg",zp,width=12,height=9,bg='transparent')
+ggsave("zp-Jₑ.svg",zp,width=12,height=9,bg='transparent')
 
 Pp1 = ggplot(pop1, aes(t,P)) +
     geom_line(aes(group=k),alpha=0.25,color=clrs[1]) +
@@ -246,4 +242,4 @@ Vp = grid.arrange(
     GMp1,GMp2,GMp3,
     ncol=3)
 
-ggsave("Vp-S.svg",Vp,width=12,height=9,bg='transparent')
+ggsave("Vp-Jₑ.svg",Vp,width=12,height=9,bg='transparent')

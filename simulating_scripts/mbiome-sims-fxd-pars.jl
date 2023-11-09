@@ -50,6 +50,12 @@ function Nₑ(Nₑs)
 
     end
 
+    convert("dat/Nₑ/",1:length(Nₑs))
+
+    cmmd1 = `echo "Has finished simulating across Nₑ"`
+    cmmd2 = `mail -s "Cresko Cluster" bweek@uoregon.edu`
+    run(pipeline(cmmd1,cmmd2))
+
 end
 
 function S(Ss)
@@ -79,6 +85,12 @@ function S(Ss)
 
     end
 
+    convert("dat/S/",1:length(Ss))
+
+    cmmd1 = `echo "Has finished simulating across S"`
+    cmmd2 = `mail -s "Cresko Cluster" bweek@uoregon.edu`
+    run(pipeline(cmmd1,cmmd2))
+
 end
 
 function κ(κs)
@@ -106,6 +118,12 @@ function κ(κs)
         ens(p)
 
     end
+
+    convert("dat/κ/",1:length(κs))
+
+    cmmd1 = `echo "Has finished simulating across κ"`
+    cmmd2 = `mail -s "Cresko Cluster" bweek@uoregon.edu`
+    run(pipeline(cmmd1,cmmd2))
 
 end
 
@@ -137,25 +155,26 @@ function Jₑ(Jₑs)
 
     end
 
+    convert("dat/Jₑ/",1:length(Jₑs))
+
     cmmd1 = `echo "Has finished simulating across Jₑ"`
     cmmd2 = `mail -s "Cresko Cluster" bweek@uoregon.edu`
     run(pipeline(cmmd1,cmmd2))
 
-    convert("dat/Jₑ/",1:length(Jₑs))
-
 end
 
-# Nₑs = trunc.(Int64,10 .^ (1.0:0.25:3.0))
-# Ss  = trunc.(Int64,10 .^ (1.0:0.25:3.0))
-# κs  = 0:0.125:1
+Nₑs = trunc.(Int64,10 .^ (1.0:1.0:3.0))
+κs  = 0:0.5:1
 
-# Nₑ(Nₑs)
+Nₑ(Nₑs)
+κ(κs)
+
+# Ss  = trunc.(Int64,10 .^ (1.0:1.0:3.0))
 # S(Ss)
-# κ(κs)
 
-# convert("dat/Nₑ/",1:length(Nₑs))
-# convert("dat/S/",1:length(Ss))
-# convert("dat/κ/",1:length(κs))
+# Jₑs = trunc.(Int64,10 .^ (2.0:2.0:6.0))
+# Jₑ(Jₑs)
 
-Jₑs = trunc.(Int64,10 .^ (2.0:1.0:4.0))
-Jₑ(Jₑs)
+cmmd1 = `echo "Has finished all simulations"`
+cmmd2 = `mail -s "Cresko Cluster" bweek@uoregon.edu`
+run(pipeline(cmmd1,cmmd2))
