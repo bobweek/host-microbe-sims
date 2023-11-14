@@ -31,7 +31,7 @@ for ℓ in ℓs
 
 		if κ == 1.0
 			ℓ = 0.0
-		end		
+		end
 
 		as = asystem(ℓ = ℓ, κ = κ, G = 0, T = 5, k = i)
 		arun(as)

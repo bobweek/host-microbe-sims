@@ -25,13 +25,12 @@ cmnthm_ms = theme(
     axis.title = element_text(size=16))
 
 
-
 #
 # Nₑ
 #
 
 
-fnl = read.csv("dat/posNₑ/fnl_rndpar_dat.csv")
+fnl = read.csv("../dat/Nₑ/fnl_rndpar_dat.csv")
 
 subdf = fnl[sample(nrow(fnl), 10000),]
 
@@ -62,13 +61,12 @@ Nepl = ggplot() +
     # cmnthm_ms
 
 
-
 #
 # S
 #
 
 
-fnl = read.csv("dat/posS/fnl_rndpar_dat.csv")
+fnl = read.csv("../dat/S/fnl_rndpar_dat.csv")
 
 subdf = fnl[sample(nrow(fnl), 10000),]
 
@@ -98,13 +96,12 @@ Spl = ggplot() +
     # cmnthm_ms
 
 
-
 #
 # κ
 #
 
 
-fnl = read.csv("dat/posκ/fnl_rndpar_dat.csv")
+fnl = read.csv("dat/κ/fnl_rndpar_dat.csv")
 
 subdf = fnl[sample(nrow(fnl), 10000),]
 
@@ -137,7 +134,7 @@ subdf = fnl[sample(nrow(fnl), 10000),]
 #
 
 
-fnl = read.csv("dat/posκℓ/fnl_rndpar_dat.csv")
+fnl = read.csv("dat/κℓ/fnl_rndpar_dat.csv")
 
 subdf = fnl[sample(nrow(fnl), 10000),]
 
@@ -173,10 +170,10 @@ ggsave("d_dm.png",dpl,width=8,height=8)
 # β
 #
 
-Sfnl = read.csv("dat/posS/fnl_rndpar_dat.csv")
-Nfnl = read.csv("dat/posNₑ/fnl_rndpar_dat.csv")
-κfnl = read.csv("dat/posκ/fnl_rndpar_dat.csv")
-κℓfnl = read.csv("dat/posκℓ/fnl_rndpar_dat.csv")
+Sfnl = read.csv("dat/S/fnl_rndpar_dat.csv")
+Nfnl = read.csv("dat/Nₑ/fnl_rndpar_dat.csv")
+κfnl = read.csv("dat/κ/fnl_rndpar_dat.csv")
+κℓfnl = read.csv("dat/κℓ/fnl_rndpar_dat.csv")
 
 fnl = rbind(Nfnl,Sfnl,κfnl,κℓfnl)
 
@@ -205,7 +202,7 @@ ggplot() +
     ylab("") + 
     cmnthm_slides
 # cmnthm_ms
-head(fnl)
+
 ggplot() +
     # geom_density2d(data=subdf,aes(β,dm)) +
     geom_point(data=subdf,
