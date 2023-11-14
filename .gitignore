@@ -1,10 +1,6 @@
 *.csv
 *.code-workspace
-tst/
-S/
-Nₑ/
-ℓκ/
-κ/
+dat/
 *.html
 *.pdf
 *.lintr
